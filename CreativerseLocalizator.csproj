@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<!-- Мелон 0.7.3 для Mono-пациентов требует строго классический .NET Framework 4.8 -->
+		<TargetFramework>net48</TargetFramework>
+		<AssemblyName>CreativerseLocalizator</AssemblyName>
+		<RootNamespace>CreativerseLocalizator</RootNamespace>
+		<LangVersion>latest</LangVersion>
+		<Nullable>disable</Nullable>
+		<CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GameDir>F:\GAMES\Creativerse</GameDir>
+		<ManagedDir>$(GameDir)\Creativerse_Data\Managed</ManagedDir>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Ядро MelonLoader v0.7.3 для Mono (берём строго из net472, как мы выяснили) -->
+		<Reference Include="MelonLoader">
+			<HintPath>$(GameDir)\MelonLoader\net472\MelonLoader.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="0Harmony">
+			<HintPath>$(GameDir)\MelonLoader\net472\0Harmony.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(ManagedDir)\Newtonsoft.Json.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!-- Базовые модули Unity Mono из папки Managed нашей бородатой нежити -->
+		<Reference Include="Assembly-CSharp">
+			<HintPath>$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine">
+			<HintPath>$(ManagedDir)\UnityEngine.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>$(ManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.IMGUIModule">
+			<HintPath>$(ManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.InputLegacyModule">
+			<HintPath>$(ManagedDir)\UnityEngine.InputLegacyModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(ManagedDir)\UnityEngine.UI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<!-- АВТОМАТИЗАЦИЯ СЕРХИО: Сама швыряет готовый менеджер в Mods кладбища! -->
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="xcopy &quot;$(TargetPath)&quot; &quot;$(GameDir)\Mods\&quot; /Y /I" />
+	</Target>
+
+</Project>
