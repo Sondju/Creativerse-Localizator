@@ -6,7 +6,7 @@ namespace CreativerseLocalizator
     {
         public string Key { get; set; }
         public string Original { get; set; }
-        public string RuTranslation { get; set; }
+        public string Translation { get; set; }
     }
 
     public class LocalizationBundle

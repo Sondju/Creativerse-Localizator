@@ -24,14 +24,18 @@
 			<HintPath>$(GameDir)\MelonLoader\net472\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(ManagedDir)\Newtonsoft.Json.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
 
 		<!-- Базовые модули Unity Mono из папки Managed нашей бородатой нежити -->
 		<Reference Include="Assembly-CSharp">
 			<HintPath>$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(ManagedDir)\Newtonsoft.Json.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="TextMeshPro">
+			<HintPath>$(ManagedDir)\TextMeshPro.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="UnityEngine">

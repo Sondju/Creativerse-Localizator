@@ -1,4 +1,3 @@
-using HarmonyLib;
 using MelonLoader;
 using System;
 using UnityEngine;
@@ -31,19 +30,6 @@ namespace CreativerseLocalizator
             if (Input.GetKeyDown(KeyCode.F10))
             {
                 I2LocJsonDumper.ExportI2Localization();
-            }
-        }
-
-        [HarmonyPatch(typeof(I2.Loc.LocalizationManager), "GetTermTranslation", new[] { typeof(string) })]
-        public class LocalizationGetTermTranslationPatch
-        {
-            [HarmonyPostfix]
-            public static void Postfix(string Term, ref string __result)
-            {
-                if (TranslationStore.CustomTranslations.TryGetValue(Term, out var custom))
-                {
-                    __result = custom;
-                }
             }
         }
     }

@@ -14,17 +14,17 @@ namespace CreativerseLocalizator
 {
     public static class I2LocJsonDumper
     {
-        private static readonly string OutputPath = Path.Combine(MelonEnvironment.ModsDirectory, "localization_keys.json");
+        private static readonly string OutputPath = Path.Combine(MelonEnvironment.ModsDirectory, "localization_dump.json");
 
         public static void ExportI2Localization()
         {
             var bundle = new LocalizationBundle();
 
             // Находим тип главного статического менеджера локализации I2.Loc
-            var locMgrType = AccessTools.TypeByName("I2.Loc.LocalizationManager");
+            var locMgrType = AccessTools.TypeByName("LocalizationManager");
             if (locMgrType == null)
             {
-                MelonLogger.Error("[I2LocJsonDumper] Критическая ошибка! Не найден тип I2.Loc.LocalizationManager.");
+                MelonLogger.Error("[I2LocJsonDumper] Критическая ошибка! Не найден тип LocalizationManager.");
                 return;
             }
 
@@ -91,10 +91,10 @@ namespace CreativerseLocalizator
             if (sourceObj == null || bundle == null) return;
 
             // Находим тип данных элементов списка терминов из I2.Loc
-            var termDataType = AccessTools.TypeByName("I2.Loc.TermData");
+            var termDataType = AccessTools.TypeByName("TermData");
             if (termDataType == null)
             {
-                MelonLogger.Error("[I2LocJsonDumper] Не найден тип данных I2.Loc.TermData.");
+                MelonLogger.Error("[I2LocJsonDumper] Не найден тип данных TermData.");
                 return;
             }
 
@@ -145,58 +145,6 @@ namespace CreativerseLocalizator
             {
                 MelonLogger.Error("[I2LocJsonDumper] Ошибка! Не найдены поля 'Term' или 'Languages' внутри класса TermData.");
                 return;
-            }
-
-            // === СЕРХИО, СТРАТЕГИЧЕСКАЯ ИИ-ЗАЩИТА ОТ ПЕРЕЗАПИСИ РУССКОГО ПЕРЕВОДА! ===
-            // Проверяем, существует ли уже файл перевода на диске, и если да — бережно вытаскиваем старый русский кэш
-            var existingTranslations = new Dictionary<string, string>(StringComparer.Ordinal);
-            try
-            {
-                // Ссылка на тот самый путь JsonPath из твоего TranslationLoader
-                string checkPath = Path.Combine(MelonEnvironment.ModsDirectory, "localization_keys.json");
-                if (File.Exists(checkPath))
-                {
-                    string oldJson = File.ReadAllText(checkPath, Encoding.UTF8);
-                    var oldBundle = JsonConvert.DeserializeObject<LocalizationBundle>(oldJson);
-                    if (oldBundle?.Entries != null)
-                    {
-                        foreach (var entry in oldBundle.Entries)
-                        {
-                            if (!string.IsNullOrEmpty(entry.Key) && !string.IsNullOrEmpty(entry.RuTranslation))
-                            {
-                                existingTranslations[entry.Key] = entry.RuTranslation;
-                            }
-                        }
-                    }
-                }
-            }
-            catch { }
-
-            // Обходим проиндексированную ОЗУ лавину терминов кубов Creativerse
-            foreach (var termObj in termsList)
-            {
-                if (termObj == null) continue;
-
-                string key = termField.GetValue(termObj) as string;
-                string[] languagesArray = languagesField.GetValue(termObj) as string[];
-
-                if (string.IsNullOrEmpty(key) || languagesArray == null || languagesArray.Length == 0) continue;
-
-                string englishText = languagesArray[0];
-
-                if (!bundle.Entries.Exists(e => e != null && e.Key == key))
-                {
-                    // Проверяем: если этот ключ уже был переведен в старом файле, бережно сохраняем русский перевод!
-                    // Если ключа не было — оставляем пустым для оффлайн ИИ
-                    existingTranslations.TryGetValue(key, out string oldRuTranslation);
-
-                    bundle.Entries.Add(new LocalizationEntry
-                    {
-                        Key = key,
-                        Original = englishText ?? string.Empty,
-                        RuTranslation = oldRuTranslation ?? string.Empty
-                    });
-                }
             }
         }
     }
