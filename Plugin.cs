@@ -2,7 +2,7 @@ using MelonLoader;
 using System;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(CreativerseLocalizator.ModCore), "Localizator API", "1.0.0", "Sergio")]
+[assembly: MelonInfo(typeof(CreativerseLocalizator.ModCore), "Localizator API", "1.0.1", "Sergio")]
 [assembly: MelonGame]
 
 namespace CreativerseLocalizator
